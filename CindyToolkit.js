@@ -1,5 +1,11 @@
 import {SVG} from './svg.min.js';
 
+/**
+ * 
+ * @param {*} window - the window to display the button
+ * @param {String} t - text shown on the button
+ * @returns {Function} move
+ */
 var Button = function(window, t){
   var rect = window.rect(80,40).fill('pink');
   var state = "";
@@ -38,19 +44,38 @@ var Button = function(window, t){
   }
 
   return {
+      /**
+       * 
+       * @param {Integer} x - move to location on x-axis
+       * @param {Integer} y - move to location on y-axis
+       */
       move: function(x, y) {
           rect.move(x, y);
           label.move(x+10, y+9);
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       onClick: function(eventHandler){
           clickEvent = eventHandler;
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       stateChanged: function(eventHandler) {
           stateEvent = eventHandler;
       },
   }
 };
 
+/**
+ * 
+ * @param {*} window - canvas to display
+ * @param {String} t - text shown on the right side of the checkbox 
+ * @returns {Function} move
+ */
 var CheckBox = function(window, t){
   var circle = window.circle(30).fill({color:'pink', opacity: 0.2}).stroke({color: '#cc3399', width: 2.0});
   var mydrawing = SVG('<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><line style="paint-order: fill; stroke: rgb(204, 51, 153); stroke-opacity: 0.73; stroke-width: 50px;" x1="116.785" y1="169.005" x2="229.246" y2="328.694"/><line style="paint-order: fill; stroke: rgb(204, 51, 153); stroke-opacity: 0.73; stroke-width: 50px;" x1="221.953" y1="328.379" x2="427.846" y2="110.992"/></svg>');
@@ -93,6 +118,7 @@ var CheckBox = function(window, t){
       checkMark.hide();
       checkEvent(event);
   })
+  
 
   function stateTransit(){
     if (state != ""){
@@ -101,14 +127,27 @@ var CheckBox = function(window, t){
   }
 
   return {
+      /**
+       * 
+       * @param {Integer} x - move to location on x-axis
+       * @param {Integer} y - move to location on y-axis
+       */
       move: function(x, y) {
           circle.move(x, y);
           label.move(x+40, y+5);
           checkMark.move(x-4, y);
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       onCheck: function(eventHandler){
           checkEvent = eventHandler;
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       stateChanged: function(eventHandler) {
           stateEvent = eventHandler;
       },
@@ -116,6 +155,12 @@ var CheckBox = function(window, t){
 
 }
 
+/**
+ * 
+ * @param {*} window - canvas to display 
+ * @param {Integer} n - n>=2 number of radio buttons
+ * @returns {Function} move
+ */
 var RadioButton = function(window, n){
   var radios = window.group();
   var radioArray = [];
@@ -169,6 +214,11 @@ var RadioButton = function(window, n){
     }
   }
   return {
+      /**
+       * 
+       * @param {Integer} x - move to location on x-axis
+       * @param {Integer} y - move to location on y-axis
+       */
       move: function(x, y) {
           let newx = x;
           let newy = y;
@@ -178,19 +228,36 @@ var RadioButton = function(window, n){
             newy += 35;
           }
       },
+      /**
+       * 
+       * @param {Integer} i - the desired index of radio button to be changed
+       * @param {String} newlabel - the new label text to change to
+       */
       setLabel: function(i, newlabel) {
           labelArray[i].text(newlabel);
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       onCheck: function(eventHandler){
           checkedEvent = eventHandler;
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       stateChanged: function(eventHandler) {
           stateEvent = eventHandler;
       }
       }
 };
 
-
+/**
+ * 
+ * @param {*} window - place to display textBox
+ * @returns {Function} move
+ */
 var TextBox = function(window){
   var textbox = window.group();
   var rect = textbox.rect(200,30).fill({color: 'pink', opacity: 0.3}).stroke({color: '#cc3399', width: 2.0});
@@ -235,18 +302,39 @@ var TextBox = function(window){
   }
 
   return {
+      /**
+       * 
+       * @param {Integer} x - move to location on x-axis
+       * @param {Integer} y - move to location on y-axis
+       */
       move: function(x, y) {
           textbox.move(x, y);
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       onChange: function(eventHandler){
           changeEvent = eventHandler;
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       stateChanged: function(eventHandler) {
           stateEvent = eventHandler;
       },
+      /**
+       * 
+       * @returns the textbox item itself
+       */
       src: function() {
         return textbox;
       },
+      /**
+       * 
+       * @returns user input textbox text
+       */
       text: function() {
         return text;
       },
@@ -254,6 +342,11 @@ var TextBox = function(window){
     
 }
 
+/**
+ * 
+ * @param {*} window - canvas to display scrollbar on
+ * @returns {Function} move
+ */
 var Scrollbar = function(window) {
     var scrollbar = window.group();
     var iniX = 100;
@@ -336,25 +429,46 @@ var Scrollbar = function(window) {
     };
 
     return {
+        /**
+        * 
+        * @param {Integer} x - move to location on x-axis
+        * @param {Integer} y - move to location on y-axis
+        */
         move: function(x,y) {
             scrollbar.move(x,y);
             iniX = x;
             iniY = y;
         },
         
+        /**
+         * 
+         * @param {Integer} n - the new height desired to set bar to
+         */
         setBarHeight: function(n) {
             bar.height(n);
             thumb.height(n/3);
         },
-            
+        
+        /**
+         * 
+         * @returns current thumb position on the bar
+         */
         getThumbPos() {
             return [thumb.x(), thumb.y()]
         },
-            
+        
+        /**
+         * 
+         * @param {*} eventHandler 
+         */
         onScroll(eventHandler) {
             scrollEvent = eventHandler;
         },
-            
+          
+        /**
+         * 
+         * @param {*} eventHandler 
+         */
         stateChanged: function(eventHandler) {
             stateEvent = eventHandler
         }
@@ -362,7 +476,11 @@ var Scrollbar = function(window) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} window - place to display progress bar
+ * @returns {Function} move
+ */
 var ProgressBar = function(window) {
     var progressBar = window.group()
     var barW = 300;
@@ -419,32 +537,57 @@ var ProgressBar = function(window) {
     };
         
     return {
+        /**
+        * 
+        * @param {Integer} x - move to location on x-axis
+        * @param {Integer} y - move to location on y-axis
+        */
         move: function(x,y) {
           progressBar.move(x, y);
           let mid = (x + barW )/2 + x
           dec.move(mid+25, y+2);
           inc.move(mid+50, y+8);
         },
-
+        
+        /**
+         * 
+         * @param {Integer} val - desired bar width to set the progress outer box to
+         */
         setBarWidth: function(val) {
             bar.width(val);
             barW = val;
         },
-            
+        
+        /**
+         * 
+         * @param {Interger} val - increment value setter
+         */
         setIncrementValue: function(val) {
             increment = val;
             let currW = bar.width() - 2;
             progress.width(currW * (val/100));
         },
-            
+        
+        /**
+         * 
+         * @returns {Interger} increment value getter
+         */
         getIncrementValue: function() {
             return increment;
         },
-            
+        
+        /**
+         * 
+         * @param {*} event 
+         */
         stateChanged: function(event) {
             stateEvent = event;
         },
-            
+          
+        /**
+         * 
+         * @param {*} event 
+         */
         onIncrement: function(event) {
             progressEvent = event;
         }
@@ -452,6 +595,12 @@ var ProgressBar = function(window) {
 
 }
 
+/**
+ * 
+ * @param {*} window - place to display thumb up button
+ * @param {Integer} initN - initial thumb up value stored
+ * @returns {Function} move
+ */
 var ThumbUp = function(window, initN) {
   var thumbgroup = window.group();
   var source = SVG('<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"viewBox="0 0 29.046 29.046" style="enable-background:new 0 0 29.046 29.046;" xml:space="preserve"><g><path d="M25.334,17.932c0,1.291-1.193,2.104-2.486,2.104h-0.01c0.965,0.166,2.111,1.331,2.111,2.462 c0,1.243-1.184,2.019-2.43,2.019h-1.072c0.844,0.243,1.977,1.375,1.977,2.462c0,1.27-1.191,2.067-2.459,2.067H10.156 c-3.56,0-6.443-2.887-6.443-6.447c0,0,0-6.872,0-6.88c0-2.522,1.395-5.189,3.59-6.042c1.711-1.126,5.15-3.133,5.883-6.85 c0-1.449,0-2.809,0-2.809s4.807-0.52,4.807,3.999c0,5.322-3.348,6.186-0.686,6.314h3.98c1.406,0,2.621,1.37,2.621,2.779 c0,1.217-1.154,2.006-2.119,2.254h1.059C24.141,15.365,25.334,16.642,25.334,17.932z"/></svg>');
@@ -485,7 +634,6 @@ var ThumbUp = function(window, initN) {
       label.text(num+"");
   })
   
-
   function stateTransit(){
     if (state != ""){
       stateEvent("ThumbUp Button state: "+state);
@@ -493,16 +641,33 @@ var ThumbUp = function(window, initN) {
   }
 
   return {
+      /**
+       * 
+       * @param {Integer} x - move to location on x-axis
+       * @param {Integer} y - move to location on y-axis
+       */
       move: function(x, y) {
           thumbgroup.move(x, y);
           label.move(x+40, y+5);
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       onUp: function(eventHandler){
            upEvent = eventHandler;
       },
+      /**
+       * 
+       * @param {*} eventHandler 
+       */
       stateChanged: function(eventHandler) {
           stateEvent = eventHandler;
       },
+      /**
+       * 
+       * @returns current thumbed up number getter
+       */
       getThumbNumber: function(){
         return num;
       }
